@@ -1,0 +1,81 @@
+﻿use_bpm 60
+
+define :theme do
+  use_synth :chiplead
+  
+  play chord(:C, :maj9), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.5
+  play chord(:E, :minor7), release: 1, amp: 0.75, pan: -0.1
+  sleep 0.5
+  play chord(:A, :minor7), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.5
+  play chord(:D, :minor7), release: 1, amp: 0.75, pan: -0.1
+  sleep 0.5
+  play chord(:D, :min), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.25
+  play chord(:D, :min), release: 1, amp: 0.75, pan: -0.1
+  sleep 0.25
+  play chord(:C, :maj), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.25
+  play chord(:D, :min), release: 1.2, amp: 1, pan: -0.1
+  sleep 0.5
+  #3.25
+  
+  play chord(:C, :maj9), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.5
+  play chord(:E, :minor7), release: 1, amp: 0.75, pan: -0.1
+  sleep 0.5
+  play chord(:A, :minor7), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.5
+  play chord(:D, :minor7), release: 1, amp: 0.75, pan: -0.1
+  sleep 0.5
+  play chord(:D, :min), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.25
+  play chord(:D, :min), release: 1, amp: 0.75, pan: -0.1
+  sleep 0.25
+  play chord(:C, :maj), release: 1, amp: 0.75, pan: 0.1
+  sleep 0.25
+  play chord(:F, :major7), release: 1.2, amp: 1, release: 2, pan: -0.5
+  sleep 0.5
+  #6.5
+end
+
+in_thread(name: :main) do
+  with_fx :reverb do
+    loop do
+      theme
+    end
+  end
+end
+
+in_thread(name: :drums1) do
+  with_fx :echo do
+    loop do
+      sample :drum_heavy_kick, amp: 1, attack: 0.04, pan: -0.1
+      sleep 1
+    end
+  end
+end
+
+in_thread(name: :snregular) do
+  with_fx :reverb do
+    loop do
+      if !tick.even?
+        sample :sn_zome, attack: 0.04, pan: 0.1
+      end
+      sleep 0.5
+    end
+  end
+end
+
+in_thread(name: :sniregular) do
+  with_fx :reverb do
+    loop do
+      sleep 6
+      if tick.even?
+        sample :sn_zome, attack: 0.04, pan: 0.1
+        sleep 1
+      end
+    end
+  end
+end
